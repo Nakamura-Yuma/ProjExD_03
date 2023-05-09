@@ -140,12 +140,38 @@ class Beam:
         self._rct.move_ip(self._vx, self._vy) #ビームが右に進み続ける
         screen.blit(self._img, self._rct) #動いたビームを表示
 
+# class Explosion:
+#     def __init__(self):
+#         """
+#         爆発エフェクトに関するクラス
+#         """
+#         self._img = pg.image.load("ex03/fig/seplosion.gif") #画像をsurface
+#         self._img2 = pg.transform.flip("ex03/fig/seplosion.gif")
+#         self._rct = self._img.get_rect() #画像surfaceに対応したrect
+#         self._rct2 = self._img2.get_rect()
+#         self._rct.centerx = 
+
+#     def update(self, screen: pg.Surface):
+#         """
+#         爆発のエフェクトを時間中、交互に表示させ爆発を演出
+#         """
+
+
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     clock = pg.time.Clock()
     bg_img = pg.image.load("ex03/fig/pg_bg.jpg")
 
+    x = 0
+    fonto = pg.font.Font(None, 80)
+    #txt = fonto.render(f"sucore:{x}", True,  (1, 1, 1)) #スコアを作成
+    txt = fonto.render(f"こんにちは", True,  (255, 255, 255)) #スコアを作成
+    print("!!!!!!!!!!!!!!!! konnitiha")
+    screen.blit(txt, [300, 200])
+
+    
     bird = Bird(3, (900, 400))
     bombs = [Bomb() for i in range(NUM_OF_BOMB)] #爆弾をNUM_OF_BOMBの数だけ作成
     beam = None
@@ -159,7 +185,11 @@ def main():
                 beam = Beam(bird) #ビームが出る
 
         tmr += 1
+
         screen.blit(bg_img, [0, 0])
+        fonto = pg.font.Font(None, 80)
+        txt = fonto.render(f"sucore:{x}", True,  (1, 1, 1)) #スコアを作成
+        screen.blit(txt, [150, 100])
 
         for bomb in bombs:
             bomb.update(screen) #ボムをアップデート
@@ -179,11 +209,15 @@ def main():
             for i , bomb in enumerate(bombs):
                 if beam._rct.colliderect(bomb._rct): #爆弾にビームが当たった時               
                     beam = None #ビームを消す
+                    x += 1
                     del bombs[i] #i番目の爆弾を消す
                     bird.change_img(6, screen) #こうかとんが喜んでいる画像を表示
                     break
         pg.display.update()
         clock.tick(1000)
+
+    
+
 
 
 if __name__ == "__main__":
