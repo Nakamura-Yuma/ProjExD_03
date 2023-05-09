@@ -118,15 +118,15 @@ class Beam:
         self._rct = self._img.get_rect() # 画像surfaceに対応したrect
         self._rct.centerx = bird._rct.centerx + 100 # こうかとんの中心座標+ちょっと右
         self._rct.centery = bird._rct.centery 
-        self._vx, self._vy = +1, 0
+        self._vx, self._vy = +1, 0 #ビームが右に1進む
 
     def update(self, screen: pg.Surface):
         """
         ビームを速度self._vyに基づき移動させる
         引数 screen：画面Surface
         """
-        self._rct.move_ip(self._vx, self._vy)
-        screen.blit(self._img, self._rct)
+        self._rct.move_ip(self._vx, self._vy) #ビームが右に進み続ける
+        screen.blit(self._img, self._rct) #動いたビームを表示
 
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
@@ -143,13 +143,13 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
-            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                beam = Beam(bird)
+            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE: #スペースキーが押されたとき
+                beam = Beam(bird) #ビームが出る
 
         tmr += 1
         screen.blit(bg_img, [0, 0])
-        if bomb is not None:
-            bomb.update(screen)
+        if bomb is not None: #ボムがあるとき
+            bomb.update(screen) #ボムをアップデート
             if bird._rct.colliderect(bomb._rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
                 bird.change_img(8, screen)
@@ -162,9 +162,10 @@ def main():
         bird.update(key_lst, screen)
         if beam is not None:
             beam.update(screen)
-            if beam is not None and beam._rct.colliderect(bomb._rct):
-                bomb = None
-                beam = None
+            if beam is not None and beam._rct.colliderect(bomb._rct): #爆弾にビームが当たった時               
+                bomb = None #爆弾を消す
+                beam = None #ビームを消す
+                bird.change_img(6, screen) #こうかとんが喜んでいる画像を表示
         pg.display.update()
         clock.tick(1000)
 
