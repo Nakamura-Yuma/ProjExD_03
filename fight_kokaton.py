@@ -40,7 +40,7 @@ class Bird:
         引数1 num：こうかとん画像ファイル名の番号
         引数2 xy：こうかとん画像の位置座標タプル
         """
-        img0 = pg.transform.rotozoom(pg.image.load(f"ex03/fig/{num}.png"), 0, 2.0)
+        img0 = pg.transform.rotozoom(pg.image.load(f"ex03/fig/{num}.png"), 0, 2.0) #画像読み込み
         img1 = pg.transform.flip(img0, True, False) #右向き　2倍
         self._imgs = {
             (+1, 0): img1, #右
@@ -90,7 +90,7 @@ class Bomb:
     """
     爆弾に関するクラス
     """
-    _colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
+    _colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)] #色のリスト
     _dires = [-1, 0, 1]
     def __init__(self):
         """
@@ -140,23 +140,6 @@ class Beam:
         self._rct.move_ip(self._vx, self._vy) #ビームが右に進み続ける
         screen.blit(self._img, self._rct) #動いたビームを表示
 
-# class Explosion:
-#     def __init__(self):
-#         """
-#         爆発エフェクトに関するクラス
-#         """
-#         self._img = pg.image.load("ex03/fig/seplosion.gif") #画像をsurface
-#         self._img2 = pg.transform.flip("ex03/fig/seplosion.gif")
-#         self._rct = self._img.get_rect() #画像surfaceに対応したrect
-#         self._rct2 = self._img2.get_rect()
-#         self._rct.centerx = 
-
-#     def update(self, screen: pg.Surface):
-#         """
-#         爆発のエフェクトを時間中、交互に表示させ爆発を演出
-#         """
-
-
 
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
@@ -164,13 +147,7 @@ def main():
     clock = pg.time.Clock()
     bg_img = pg.image.load("ex03/fig/pg_bg.jpg")
 
-    x = 0
-    fonto = pg.font.Font(None, 80)
-    #txt = fonto.render(f"sucore:{x}", True,  (1, 1, 1)) #スコアを作成
-    txt = fonto.render(f"こんにちは", True,  (255, 255, 255)) #スコアを作成
-    print("!!!!!!!!!!!!!!!! konnitiha")
-    screen.blit(txt, [300, 200])
-
+    x = 0 #爆弾の倒した数を初期化
     
     bird = Bird(3, (900, 400))
     bombs = [Bomb() for i in range(NUM_OF_BOMB)] #爆弾をNUM_OF_BOMBの数だけ作成
@@ -179,7 +156,7 @@ def main():
     tmr = 0
     while True:
         for event in pg.event.get():
-            if event.type == pg.QUIT:
+            if event.type == pg.QUIT: 
                 return
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE: #スペースキーが押されたとき
                 beam = Beam(bird) #ビームが出る
@@ -187,15 +164,15 @@ def main():
         tmr += 1
 
         screen.blit(bg_img, [0, 0])
-        fonto = pg.font.Font(None, 80)
-        txt = fonto.render(f"sucore:{x}", True,  (1, 1, 1)) #スコアを作成
-        screen.blit(txt, [150, 100])
+        fonto = pg.font.Font(None, 80) #大きさ80のフォントを作成
+        txt = fonto.render(f"score:{x}", True,  (1, 1, 1)) #スコアを作成
+        screen.blit(txt, [150, 100]) #スコアを表示
 
         for bomb in bombs:
             bomb.update(screen) #ボムをアップデート
             if bird._rct.colliderect(bomb._rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
-                bird.change_img(8, screen)
+                bird.change_img(8, screen) #こうかとんの泣き顔
                 pg.display.update()
                 time.sleep(1)
                 return
